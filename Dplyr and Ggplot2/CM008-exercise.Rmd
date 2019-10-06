@@ -78,11 +78,12 @@ ggplot(gapminder, aes(gdpPercap, lifeExp)) +
 ```{r, fig.width = 8, fig.height = 2}
 gapminder %>% 
   filter(continent != "Oceania") %>% 
-  ggplot(aes(gdpPercap, lifeExp, size = pop, color = year)) +
+  ggplot(aes(gdpPercap, lifeExp, size = pop, fill = continent)) +
   facet_wrap(~ continent, nrow = 1) +
   geom_point(alpha = 0.5, shape = 21) +
   scale_x_log10(labels = scales::comma_format()) + 
-  scale_size_area()
+  scale_size_area() +
+  scale_fill_discrete(guide = FALSE)
 ```
 
 A list of shapes can be found [at the bottom of the `scale_shape` documentation](https://ggplot2.tidyverse.org/reference/scale_shape.html).
@@ -93,9 +94,8 @@ Instead of alpha transparency, suppose you're wanting to fix the overplotting is
 
 ```{r, fig.width = 5, fig.height = 2}
 ggplot(gapminder) +
-  geom_point(aes(gdpPercap, lifeExp, size = 0.1)) +
-  scale_x_log10(labels = scales::dollar_format()) +
-  facet_wrap(~continent, scales = "free")
+  geom_point(aes(gdpPercap, lifeExp), size = 0.1) +
+  scale_x_log10(labels = scales::dollar_format())
 
 ```
 
@@ -117,8 +117,9 @@ tribble(
   3, 0.5, 0.9,
   4, 0.4, 0.5
 ) %>% 
-  ggplot(aes(x, y)) + 
-  geom_line()
+  ggplot(aes(x, y)) +
+  geom_path(arrow = arrow()) +
+  geom_text(aes(label = time), nudge_y = 0.1, nudge_x = -0.02)
 ```
 
 ## Exercise 5: Life expectancies in Africa
@@ -130,9 +131,10 @@ Fix the plot so that you can actually see the data points. Be sure to solve the 
 ```{r, fig.width = 5, fig.height = 2}
 gapminder %>% 
   filter(continent == "Americas") %>% 
-  ggplot(aes(country, lifeExp)) + 
-  geom_point() +
-  geom_boxplot()
+  ggplot(aes(country, lifeExp)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(alpha = 0.25, height = 0.2) +
+  coord_flip()
 ```
 
 ### 5(b) Ridgeplots
@@ -158,8 +160,9 @@ gapminder %>%
 ```{r, fig.width = 5, fig.height = 2}
 mtcars %>% 
   mutate(transmission = if_else(am == 0, "automatic", "manual")) %>% 
-  ggplot(aes(cyl)) +
-  geom_bar(aes(colour = transmission))
+  ggplot(aes(cyl, ..prop..)) +
+  geom_bar(aes(fill = transmission), position = "dodge") +
+  scale_x_continuous(breaks = c(4, 6, 8))
 ```
 
 ### 6(b) Bar heights already calculated
@@ -175,7 +178,7 @@ Fix the following bar plot so that it shows these counts.
 
 ```{r}
 ggplot(hair, aes(Hair, n)) +
-  geom_bar()
+  geom_col()
 ```
 
 ## Exercise 7: Tiling
@@ -191,7 +194,7 @@ Fix the following plot so that it shows a filled-in square for each combination.
 
 ```{r}
 ggplot(hair_eye, aes(Hair, Eye)) +
-  geom_point(aes(colour = n))
+  geom_tile(aes(fill = n))
 ```
 
 By the way, `geom_count()` is like `geom_bar()`: it counts the number of overlapping points.
