@@ -29,18 +29,16 @@ Note, there will be very little coding in-class today, but I've given you plenty
 Write some notes here about what "effective visualizations" means to you. Think of elements of good graphics and plots that you have seen - what makes them good or bad? Write 3-5 points.
 
 1. Clearly labelled
-1. Easy to understand
+1. Easy to understand/not overly complicated
 1. Smart use of colors
-1. Not overly complicated
-1. 
 
 ### CQ01: Weekly hours for full-time employees
 
 > Question: Evaluate the strength of the claim based on the data: "German workers are more motivated and work more hours than workers in other EU nations."
 >
-> Very strong, strong, weak, very week, do not know
+> Very strong, strong, weak, very weak, do not know
 
-- <<Your answer here (and make sure to explain why you chose this answer)>>
+- Weak: we don't know the standard deviation; the difference between countries is exaggerated;we need to consider where the axis starts. motivation is inferred from number of hours worked, we also do not know the sample size. 
 
 - Main takeaway: Summarize the main takeaway from this question/discussion here
 
@@ -50,7 +48,7 @@ Write some notes here about what "effective visualizations" means to you. Think 
 > 
 > Yes, No, Do not know
 
-- <<Your answer here (and make sure to explain why you chose this answer)>>
+- Do not know. The years are not labelled. The y-axis is too broad. We need to know that a 2 degree difference is actually significant.
 
 - Main takeaway: Summarize the main takeaway from this question/discussion here
 
@@ -58,9 +56,9 @@ Write some notes here about what "effective visualizations" means to you. Think 
 
 > Question: Evaluate the strength of the claim based on the data: “Soon after this legislation was passed, gun deaths sharply declined."
 >
-> Very strong, strong, weak, very week, do not know
+> Very strong, strong, weak, very weak, do not know
 
-- <<Your answer here (and make sure to explain why you chose this answer)>>
+- Very weak. The gun deaths are actually increasing. The y-axis is flipped, so the graph is very counterintuitive.
 
 - Main takeaway: Summarize the main takeaway from this question/discussion here
 
@@ -93,6 +91,35 @@ How many of the principles did you manage to break?
 Did you know that you can make interactive graphs and plots in R using the plotly library? We will show you a demo of what plotly is and why it's useful, and then you can try converting a static ggplot graph into an interactive plotly graph.
 
 This is a preview of what we'll be doing in STAT 547 - making dynamic and interactive dashboards using R!
+
+```{r}
+install.packages('plotly')
+library(tidyverse)
+library(gapminder)
+library(plotly)
+
+p <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point()
+p
+
+#make interactive
+p %>%
+  ggplotly()
+
+#plot_ly syntax
+t <- gapminder %>%
+  plot_ly(x = ~gdpPercap, 
+          y = ~lifeExp, 
+          color = ~continent, 
+          type = 'scatter',
+          mode = 'markers') #if you want a line graph, say line instead fo markers
+
+sys.setenv("plotly_username" = "")
+sys.setenv("plotly_api_key" = "")
+
+api_create(t, filename = 'cm013-plotly=example') #You can zoom in and out and share it with other people to view
+```
+
 
 ## Supplemental worksheet (Optional)
 
