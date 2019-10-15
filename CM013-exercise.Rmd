@@ -68,6 +68,8 @@ Great resource for selecting the right plot: https://www.data-to-viz.com/ ; enco
 
 ### Case Study 1: Context matters
 
+There is a factor of 10 between both y axes, so the lines are actually not tracking.
+
 ### Case Study 2: A case for pie charts
 
 ## Part 3: Principles of effective visualizations [20 mins]
